@@ -9,7 +9,7 @@ const app = express();
 app.use(cors({
   origin: [
     "http://localhost:5174",
-    "weather-web-six-theta.vercel.app",
+    "https://weather-web-six-theta.vercel.app",
   ],
   credentials: true,
 }));
