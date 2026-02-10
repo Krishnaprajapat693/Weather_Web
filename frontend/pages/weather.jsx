@@ -34,6 +34,8 @@ export default function Weather() {
         return () => clearTimeout(timer);
     }, [wishIndex]);
 
+    const [error, setError] = useState(null);
+
     // Fetch Indore Weather
     useEffect(() => {
         const fetchIndoreWeather = async () => {
@@ -75,11 +77,26 @@ export default function Weather() {
 
     // Fetch Search Weather
     const fetchWeather = async () => {
+        if (!city.trim()) return;
+        setError(null);
+        setWeather(null);
+        setForecast([]);
+
         try {
             const resWeather = await fetch(
                 `https://weather-web-1vb9.onrender.com/weather/${city}?unit=metric`
             );
+
+            if (!resWeather.ok) {
+                throw new Error("City not found");
+            }
+
             const dataWeather = await resWeather.json();
+
+            if (dataWeather.cod !== 200) {
+                throw new Error(dataWeather.message || "City not found");
+            }
+
             setWeather(dataWeather);
 
             // Set Theme
@@ -93,28 +110,34 @@ export default function Weather() {
             const resForecast = await fetch(
                 `https://weather-web-1vb9.onrender.com/forecast/${city}?unit=metric`
             );
-            const dataForecast = await resForecast.json();
 
-            const dailyData = {};
-            dataForecast.list.forEach((item) => {
-                const date = new Date(item.dt_txt).toLocaleDateString("en-US", {
-                    weekday: "short",
+            if (!resForecast.ok) {
+                console.error("Forecast not found");
+            } else {
+                const dataForecast = await resForecast.json();
+                const dailyData = {};
+                dataForecast.list.forEach((item) => {
+                    const date = new Date(item.dt_txt).toLocaleDateString("en-US", {
+                        weekday: "short",
+                    });
+                    if (!dailyData[date]) {
+                        dailyData[date] = { temps: [], icon: item.weather[0].icon };
+                    }
+                    dailyData[date].temps.push(item.main.temp);
                 });
-                if (!dailyData[date]) {
-                    dailyData[date] = { temps: [], icon: item.weather[0].icon };
-                }
-                dailyData[date].temps.push(item.main.temp);
-            });
 
-            const formattedForecast = Object.entries(dailyData).map(([day, val]) => {
-                const avgTemp =
-                    val.temps.reduce((a, b) => a + b, 0) / val.temps.length;
-                return { day, temp: Math.round(avgTemp), icon: val.icon };
-            });
+                const formattedForecast = Object.entries(dailyData).map(([day, val]) => {
+                    const avgTemp =
+                        val.temps.reduce((a, b) => a + b, 0) / val.temps.length;
+                    return { day, temp: Math.round(avgTemp), icon: val.icon };
+                });
 
-            setForecast(formattedForecast.slice(0, 7));
+                setForecast(formattedForecast.slice(0, 7));
+            }
         } catch (error) {
             console.error("Error fetching data:", error);
+            setError("City not found. Please check the spelling and try again.");
+            setTheme("default");
         }
     };
 
@@ -265,6 +288,12 @@ export default function Weather() {
                         Search
                     </button>
                 </div>
+
+                {error && (
+                    <div className="bg-red-500/20 backdrop-blur-md border border-red-500 text-white p-4 rounded-xl mb-6 shadow-lg max-w-md w-full text-center">
+                        <p className="font-semibold">{error}</p>
+                    </div>
+                )}
 
                 {weather && (
                     <div className="max-w-3xl w-full bg-white/30 backdrop-blur-md p-6 rounded-2xl shadow-lg mb-8 text-black">

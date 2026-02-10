@@ -12,11 +12,14 @@ export default function RainForecast() {
     // Theme state
     const [theme, setTheme] = useState("default");
 
+    const [error, setError] = useState(null);
+
     // ✅ Fetch sidebar data from backend /rain-forecast
     useEffect(() => {
         const fetchRainStatus = async () => {
             try {
                 const res = await fetch("https://weather-web-1vb9.onrender.com/rain-forecast");
+                if (!res.ok) throw new Error("Failed to fetch rain updates");
                 const data = await res.json();
                 setRainingNow(data.rainingNow || []);
                 setRainingSoon(data.rainingSoon || []);
@@ -30,13 +33,24 @@ export default function RainForecast() {
 
     // Main page fetch for selected city
     const fetchRainData = async () => {
-        if (!city) return;
+        if (!city.trim()) return;
+        setError(null);
+        setRainInfo([]);
 
         try {
             const res = await fetch(
                 `https://weather-web-1vb9.onrender.com/forecast/${city}?unit=metric`
             );
+
+            if (!res.ok) {
+                throw new Error("City not found");
+            }
+
             const data = await res.json();
+
+            if (data.cod !== "200") {
+                throw new Error(data.message || "City not found");
+            }
 
             const next24Hours = data.list.slice(0, 8);
 
@@ -69,6 +83,8 @@ export default function RainForecast() {
             else setTheme("default");
         } catch (err) {
             console.error("Error fetching rain data:", err);
+            setError("City not found. Please check spelling.");
+            setTheme("default");
         }
     };
 
@@ -194,6 +210,12 @@ export default function RainForecast() {
                         Check Rain
                     </button>
                 </div>
+
+                {error && (
+                    <div className="bg-red-500/20 backdrop-blur-md border border-red-500 text-white p-4 rounded-xl mb-6 shadow-lg max-w-md w-full text-center">
+                        <p className="font-semibold">{error}</p>
+                    </div>
+                )}
 
                 {rainInfo.length > 0 && (
                     <div className="max-w-3xl w-full bg-white/30 backdrop-blur-md p-6 rounded-2xl shadow-lg text-black">
