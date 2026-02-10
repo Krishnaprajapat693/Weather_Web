@@ -1,6 +1,4 @@
 
-
-
 import { useState, useEffect } from "react";
 
 export default function RainForecast() {
@@ -83,11 +81,11 @@ export default function RainForecast() {
     };
 
     return (
-        <div className="min-h-screen flex flex-row pt-16 relative overflow-hidden text-white">
+        <div className="min-h-screen flex flex-col lg:flex-row pt-16 relative overflow-hidden text-white">
             {/* 🎨 Background Layer */}
             <div
                 key={theme}
-                className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out blur-sm"
+                className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out blur-sm fixed"
                 style={{
                     backgroundImage: `url(${themeBackgrounds[theme]})`,
                 }}
@@ -135,8 +133,8 @@ export default function RainForecast() {
             )}
 
             {/* Sidebar */}
-            <div className="w-1/4 bg-white/10 backdrop-blur-md p-6 shadow-lg flex flex-col relative z-10">
-                <h2 className="text-2xl font-bold mb-4">🌍 Rain Updates</h2>
+            <div className="w-full lg:w-1/4 bg-white/10 backdrop-blur-md p-6 shadow-lg flex flex-col relative z-10 order-2 lg:order-1">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">🌍 Rain Updates</h2>
 
                 {/* Cities raining now */}
                 <div className="mb-6">
@@ -178,20 +176,20 @@ export default function RainForecast() {
             </div>
 
             {/* Main Content */}
-            <div className="w-3/4 flex flex-col items-center justify-start py-10 px-6 relative z-10 text-black">
-                <h2 className="text-4xl font-bold mb-6">🌧️ Rain Forecast (24 Hours)</h2>
+            <div className="w-full lg:w-3/4 flex flex-col items-center justify-start py-6 sm:py-10 px-4 sm:px-6 relative z-10 text-black order-1 lg:order-2">
+                <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-white lg:text-black">🌧️ Rain Forecast (24 Hours)</h2>
 
-                <div className="flex gap-3 mb-8">
+                <div className="flex gap-3 mb-8 w-full max-w-md">
                     <input
                         type="text"
                         placeholder="Enter city"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        className="px-4 py-2 rounded-lg text-black"
+                        className="flex-1 px-4 py-2 rounded-lg text-black w-full"
                     />
                     <button
                         onClick={fetchRainData}
-                        className="px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow-md hover:bg-yellow-300"
+                        className="px-4 py-2 bg-yellow-400 text-black font-semibold rounded-lg shadow-md hover:bg-yellow-300 whitespace-nowrap"
                     >
                         Check Rain
                     </button>
@@ -199,7 +197,7 @@ export default function RainForecast() {
 
                 {rainInfo.length > 0 && (
                     <div className="max-w-3xl w-full bg-white/30 backdrop-blur-md p-6 rounded-2xl shadow-lg text-black">
-                        <h3 className="text-2xl font-semibold mb-4 text-white">
+                        <h3 className="text-xl sm:text-2xl font-semibold mb-4 text-white">
                             Agle 24 ghante ka Mausam 🌍
                         </h3>
                         <ul className="space-y-3">

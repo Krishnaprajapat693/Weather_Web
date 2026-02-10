@@ -127,11 +127,11 @@ export default function Weather() {
     };
 
     return (
-        <div className="min-h-screen flex flex-row pt-16 relative overflow-hidden">
+        <div className="min-h-screen flex flex-col lg:flex-row pt-16 relative overflow-x-hidden">
             {/* 🎨 Background Image Layer */}
             <div
                 key={theme}
-                className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out blur-sm"
+                className="absolute inset-0 bg-cover bg-center transition-opacity duration-1000 ease-in-out blur-sm fixed"
                 style={{
                     backgroundImage: `url(${themeBackgrounds[theme]})`,
                 }}
@@ -193,8 +193,8 @@ export default function Weather() {
             )}
 
             {/* Sidebar */}
-            <div className="w-1/4 bg-white/10 backdrop-blur-md p-6 shadow-lg flex flex-col items-center relative z-10 text-white">
-                <h2 className="text-2xl font-bold mb-4">🌍 Indore Weather</h2>
+            <div className="w-full lg:w-1/4 bg-white/10 backdrop-blur-md p-4 sm:p-6 shadow-lg flex flex-col items-center relative z-10 text-white order-2 lg:order-1">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">🌍 Indore Weather</h2>
                 {indoreWeather ? (
                     <div className="w-full">
                         <div className="bg-white/10 p-4 rounded-2xl shadow-md mb-6">
@@ -223,7 +223,7 @@ export default function Weather() {
                         {indoreForecast.length > 0 && (
                             <div className="bg-white/10 p-4 rounded-2xl shadow-md">
                                 <h4 className="text-lg font-semibold mb-3">7-Day Forecast</h4>
-                                <div className="grid grid-cols-2 gap-3">
+                                <div className="grid grid-cols-2 lg:grid-cols-2 gap-3">
                                     {indoreForecast.map((day, idx) => (
                                         <div
                                             key={idx}
@@ -248,19 +248,19 @@ export default function Weather() {
             </div>
 
             {/* Main Content */}
-            <div className="w-3/4 flex flex-col items-center justify-start py-10 px-6 relative z-10 text-black">
-                <h2 className="text-4xl font-bold mb-6">Search Weather 🌍</h2>
-                <div className="flex gap-3 mb-8">
+            <div className="w-full lg:w-3/4 flex flex-col items-center justify-start py-6 sm:py-10 px-4 sm:px-6 relative z-10 text-black order-1 lg:order-2">
+                <h2 className="text-3xl sm:text-4xl font-bold mb-6 text-white lg:text-black">Search Weather 🌍</h2>
+                <div className="flex gap-3 mb-8 w-full max-w-md">
                     <input
                         type="text"
                         placeholder="Enter city"
                         value={city}
                         onChange={(e) => setCity(e.target.value)}
-                        className="px-4 py-2 rounded-lg text-black"
+                        className="flex-1 px-4 py-2 rounded-lg text-black w-full"
                     />
                     <button
                         onClick={fetchWeather}
-                        className="px-4 py-2 bg-blue-500 text-black font-semibold rounded-lg shadow-md hover:bg-blue-400"
+                        className="px-4 py-2 bg-blue-500 text-black font-semibold rounded-lg shadow-md hover:bg-blue-400 whitespace-nowrap"
                     >
                         Search
                     </button>
@@ -268,9 +268,9 @@ export default function Weather() {
 
                 {weather && (
                     <div className="max-w-3xl w-full bg-white/30 backdrop-blur-md p-6 rounded-2xl shadow-lg mb-8 text-black">
-                        <div className="flex justify-between items-center mb-6">
+                        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-4 sm:gap-0 text-center sm:text-left">
                             <div>
-                                <h3 className="text-3xl font-bold">
+                                <h3 className="text-2xl sm:text-3xl font-bold">
                                     {weather.name}, {weather.sys.country}
                                 </h3>
                                 <p className="text-gray-700 text-lg">
@@ -286,7 +286,7 @@ export default function Weather() {
                                     })}
                                 </p>
                             </div>
-                            <div className="text-right">
+                            <div className="text-center sm:text-right">
                                 <p className="text-5xl font-bold">
                                     {Math.round(weather.main.temp)}°
                                 </p>
@@ -301,7 +301,7 @@ export default function Weather() {
 
                 {forecast.length > 0 && (
                     <div className="max-w-3xl w-full bg-white/30 backdrop-blur-md p-6 rounded-2xl shadow-lg text-black">
-                        <h4 className="text-2xl font-semibold mb-4">7-Day Forecast</h4>
+                        <h4 className="text-2xl font-semibold mb-4 text-center sm:text-left">7-Day Forecast</h4>
                         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
                             {forecast.map((day, idx) => (
                                 <div
@@ -323,7 +323,7 @@ export default function Weather() {
 
                 {/* Wishes */}
                 <div className="text-center mt-6 text-black">
-                    <p className="text-2xl md:text-3xl font-semibold leading-snug max-w-xl mx-auto whitespace-pre-wrap">
+                    <p className="text-xl sm:text-2xl md:text-3xl font-semibold leading-snug max-w-xl mx-auto whitespace-pre-wrap text-white lg:text-black">
                         {wishText}
                         <span className="animate-pulse">|</span>
                     </p>

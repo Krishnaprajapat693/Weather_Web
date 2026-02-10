@@ -1,7 +1,4 @@
 
-
-
-
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
@@ -40,8 +37,8 @@ export default function Home() {
   }, [index, isDeleting]);
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center text-white p-6">
-      <h1 className="text-2xl md:text-4xl font-bold text-center mb-6 leading-snug max-w-2xl">
+    <div className="min-h-screen flex flex-col items-center justify-center text-white p-4 sm:p-6 text-center">
+      <h1 className="text-xl sm:text-2xl md:text-4xl font-bold mb-6 leading-snug max-w-2xl px-2">
         {text}
         <span className="animate-pulse">|</span>
       </h1>
